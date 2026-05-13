@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Inventory rules
+    match /inventory/{itemId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(itemId);
+      allow delete: if isSignedIn();
+    }
+
+    // Projects rules
+    match /projects/{projectId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(projectId);
+      allow delete: if isSignedIn();
+    }
+
+    // Shoots rules
+    match /shoots/{shootId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(shootId);
+      allow delete: if isSignedIn();
+    }
+
+    // Settings rules
+    match /settings/{settingsId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isValidId(settingsId);
+    }
+  }
+}

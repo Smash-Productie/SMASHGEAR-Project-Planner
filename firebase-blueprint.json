@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "GearItem": {
+      "title": "Gear Item",
+      "description": "An individual piece of equipment in the inventory.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "inventoryNumber": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string" },
+        "currentProjectId": { "type": "string" },
+        "image": { "type": "string" },
+        "loanedTo": { "type": "string" },
+        "loanDate": { "type": "string" },
+        "returnDateExpected": { "type": "string" }
+      },
+      "required": ["id", "inventoryNumber", "name", "category", "status"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A project or rental period where gear is assigned.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "client": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "gearIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "externalGear": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "quantity": { "type": "number" },
+              "vendor": { "type": "string" },
+              "pickupDate": { "type": "string" },
+              "returnDate": { "type": "string" },
+              "status": { "type": "string" }
+            }
+          }
+        },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "name", "startDate", "endDate", "gearIds", "status"]
+    },
+    "Shoot": {
+      "title": "Shoot",
+      "description": "A scheduled shoot or calendar event.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "summary": { "type": "string" },
+        "description": { "type": "string" },
+        "location": { "type": "string" },
+        "start": {
+          "type": "object",
+          "properties": {
+            "dateTime": { "type": "string" },
+            "date": { "type": "string" }
+          }
+        },
+        "end": {
+          "type": "object",
+          "properties": {
+            "dateTime": { "type": "string" },
+            "date": { "type": "string" }
+          }
+        }
+      },
+      "required": ["id", "summary", "start", "end"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global application settings.",
+      "type": "object",
+      "properties": {
+        "googleSheetUrl": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "inventory": {
+      "schema": "GearItem",
+      "description": "The main inventory list."
+    },
+    "projects": {
+      "schema": "Project",
+      "description": "List of all gear projects."
+    },
+    "shoots": {
+      "schema": "Shoot",
+      "description": "Calendar events and shoots."
+    },
+    "settings": {
+      "schema": "Settings",
+      "description": "Global config options."
+    }
+  }
+}
