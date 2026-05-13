@@ -2333,8 +2333,8 @@ const ShootsView = ({ shoots, projects, onStartPrep, onDeleteShoot, onViewProjec
       id: s.id,
       summary: s.summary,
       location: s.location || '',
-      start: new Date(s.start.dateTime || s.start.date || ''),
-      end: new Date(s.end.dateTime || s.end.date || ''),
+      start: new Date(s.start?.dateTime || s.start?.date || ''),
+      end: new Date(s.end?.dateTime || s.end?.date || ''),
       type: 'SHOOT' as const,
       isPrepped: false
     }));
@@ -2353,7 +2353,9 @@ const ShootsView = ({ shoots, projects, onStartPrep, onDeleteShoot, onViewProjec
       };
     });
 
-    return [...fromShoots, ...fromProjects].sort((a, b) => a.start.getTime() - b.start.getTime());
+    return [...fromShoots, ...fromProjects]
+      .filter(item => !isNaN(item.start.getTime()) && !isNaN(item.end.getTime()))
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
   }, [shoots, projects]);
 
   // Calendar Helpers
